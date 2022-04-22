@@ -1,1 +1,0 @@
-# terraform-azure-example2-vmmodule
