@@ -1,10 +1,6 @@
 name: $(BuildDefinitionName)_$(date:yyyyMMdd)$(rev:.r)
-
-  
-# Only run against develop
 trigger: 
 - main
-
 pool:
     vmImage: 'ubuntu-latest'
 
@@ -39,7 +35,7 @@ stages :
     dependsOn: [validate]
     condition: succeeded('validate')
     jobs:
-      - job: terraform_plan_develop
+      - job: terraform_plan
         steps:
               - checkout: self
               - task: TerraformInstaller@0
@@ -69,7 +65,7 @@ stages :
     dependsOn: [plan]
     condition: succeeded('plan')
     jobs:
-      - deployment: terraform_apply_develop
+      - deployment: terraform_apply
         environment: testEnv
         strategy:
           runOnce:
