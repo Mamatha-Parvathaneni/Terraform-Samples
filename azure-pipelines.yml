@@ -51,7 +51,7 @@ stages :
                   backendAzureRmResourceGroupName: 'My-Terraform-Sample'
                   backendAzureRmStorageAccountName: 'tfbackend009'
                   backendAzureRmContainerName: 'terraformstate'
-                  backendAzureRmKey: 'dev.tfstate'
+                  backendAzureRmKey: 'test.tfstate'
                   workingDirectory: '$(System.DefaultWorkingDirectory)/Example1-VariableTypes/'
               - task: TerraformTaskV1@0
                 displayName: 'plan'
@@ -85,7 +85,7 @@ stages :
                         backendAzureRmResourceGroupName: 'My-Terraform-Sample'
                         backendAzureRmStorageAccountName: 'tfbackend009'
                         backendAzureRmContainerName: 'terraformstate'
-                        backendAzureRmKey: 'dev.tfstate'
+                        backendAzureRmKey: 'test.tfstate'
                         workingDirectory: '$(System.DefaultWorkingDirectory)/Example1-VariableTypes/'
                     - task: TerraformTaskV1@0
                       displayName: 'plan'
