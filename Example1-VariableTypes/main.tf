@@ -3,6 +3,6 @@ provider "azurerm" {
 }
  
 resource "azurerm_resource_group" "rg" {
-  name     = "My-Terraform-Sample"
+  name     = "TestRG"
   location = "AustraliaEast"
 }

@@ -1,0 +1,4 @@
+Example1-VariableTypes/.terraform.lock.hcl
+Example1-VariableTypes/.terraform/providers/registry.terraform.io/hashicorp/azurerm/3.0.0/windows_amd64/terraform-provider-azurerm_v3.0.0_x5.exe
+Example1-VariableTypes/.terraform/providers/registry.terraform.io/hashicorp/azurerm/3.11.0/windows_amd64/terraform-provider-azurerm_v3.11.0_x5.exe
+Example1-VariableTypes/terraform.tfstate

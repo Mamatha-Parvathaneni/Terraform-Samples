@@ -1,17 +1,17 @@
-variable "stringvar" {
+variable "RG_Name" {
   type    = string
   default = "hi"
 }
 
-variable "mapvar" {
-  type = map(string)
+variable "Person" {
+  type = map
   default = {
-    "fruit" = "apple"
-    "veg"   = "cucumber"
+    name = "Happy", 
+    age = 23
   }
 }
 
-variable "listvar" {
+variable "NumberList" {
   type    = list(any)
   default = [1, 2, 3]
 }
