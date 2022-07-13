@@ -1,7 +1,5 @@
 name: $(BuildDefinitionName)_$(date:yyyyMMdd)$(rev:.r)
 
-variables:
-  - group: terraform-samples
   
 # Only run against develop
 trigger: none
