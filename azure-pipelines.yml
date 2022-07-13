@@ -1,0 +1,103 @@
+name: $(BuildDefinitionName)_$(date:yyyyMMdd)$(rev:.r)
+
+variables:
+  - group: terraform-samples
+  
+# Only run against develop
+trigger: none
+
+pool: Ubuntu-latest
+
+stages :
+  - stage: validate
+    jobs:
+    - job: validate
+      continueOnError: false
+      steps:
+      - task: TerraformInstaller@0
+        displayName: 'install'
+        inputs:
+          terraformVersion: '0.13.3'
+      - task: TerraformTaskV1@0
+        displayName: 'init'
+        inputs:
+          provider: 'azurerm'
+          command: 'init'
+          backendServiceArm: 'tfscdevops'
+          backendAzureRmResourceGroupName: 'My-Terraform-Sample'
+          backendAzureRmStorageAccountName: 'tfbackend009'
+          backendAzureRmContainerName: 'terraformstate'
+          backendAzureRmKey: 'dev.tfstate'
+          workingDirectory: '$(System.DefaultWorkingDirectory)/Example1-VariableTypes/'
+      - task: TerraformTaskV1@0
+        displayName: 'validate'
+        inputs:
+          provider: 'azurerm'
+          command: 'validate'
+          
+  - stage: plan
+    dependsOn: [validate]
+    condition: succeeded('validate')
+    jobs:
+      - job: terraform_plan_develop
+        steps:
+              - checkout: self
+              - task: TerraformInstaller@0
+                displayName: 'install'
+                inputs:
+                  terraformVersion: '0.13.3'
+              - task: TerraformTaskV1@0
+                displayName: 'init'
+                inputs:
+                  provider: 'azurerm'
+                  command: 'init'
+                  backendServiceArm: 'tfscdevops'
+                  backendAzureRmResourceGroupName: 'My-Terraform-Sample'
+                  backendAzureRmStorageAccountName: 'tfbackend009'
+                  backendAzureRmContainerName: 'terraformstate'
+                  backendAzureRmKey: 'dev.tfstate'
+                  workingDirectory: '$(System.DefaultWorkingDirectory)/Example1-VariableTypes/'
+              - task: TerraformTaskV1@0
+                displayName: 'plan'
+                inputs:
+                  provider: 'azurerm'
+                  command: 'plan'                  
+                  environmentServiceNameAzureRM: 'tfscdevops'
+                  workingDirectory: '$(System.DefaultWorkingDirectory)/Example1-VariableTypes/'
+
+  - stage: apply
+    dependsOn: [plan]
+    condition: succeeded('plan')
+    jobs:
+      - job: terraform_apply_develop
+        steps:
+              - checkout: self
+              - task: TerraformInstaller@0
+                displayName: 'install'
+                inputs:
+                  terraformVersion: '0.13.3'
+              - task: TerraformTaskV1@0
+                displayName: 'init'
+                inputs:
+                  provider: 'azurerm'
+                  command: 'init'
+                  backendServiceArm: 'tfscdevops'
+                  backendAzureRmResourceGroupName: 'My-Terraform-Sample'
+                  backendAzureRmStorageAccountName: 'tfbackend009'
+                  backendAzureRmContainerName: 'terraformstate'
+                  backendAzureRmKey: 'dev.tfstate'
+                  workingDirectory: '$(System.DefaultWorkingDirectory)/Example1-VariableTypes/'
+              - task: TerraformTaskV1@0
+                displayName: 'plan'
+                inputs:
+                  provider: 'azurerm'
+                  command: 'plan'                  
+                  environmentServiceNameAzureRM: 'tfscdevops'
+                  workingDirectory: '$(System.DefaultWorkingDirectory)/Example1-VariableTypes/'
+              - task: TerraformTaskV1@0
+                displayName: 'apply'
+                inputs:
+                  provider: 'azurerm'
+                  command: 'apply'                  
+                  environmentServiceNameAzureRM: 'tfscdevops'
+                  workingDirectory: '$(System.DefaultWorkingDirectory)/Example1-VariableTypes/'
