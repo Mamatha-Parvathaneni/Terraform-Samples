@@ -2,7 +2,8 @@ name: $(BuildDefinitionName)_$(date:yyyyMMdd)$(rev:.r)
 
   
 # Only run against develop
-trigger: none
+trigger: 
+- main
 
 pool:
     vmImage: 'ubuntu-latest'
