@@ -69,35 +69,39 @@ stages :
     dependsOn: [plan]
     condition: succeeded('plan')
     jobs:
-      - job: terraform_apply_develop
-        steps:
-              - checkout: self
-              - task: TerraformInstaller@0
-                displayName: 'install'
-                inputs:
-                  terraformVersion: '0.13.3'
-              - task: TerraformTaskV1@0
-                displayName: 'init'
-                inputs:
-                  provider: 'azurerm'
-                  command: 'init'
-                  backendServiceArm: 'tfscdevops'
-                  backendAzureRmResourceGroupName: 'My-Terraform-Sample'
-                  backendAzureRmStorageAccountName: 'tfbackend009'
-                  backendAzureRmContainerName: 'terraformstate'
-                  backendAzureRmKey: 'dev.tfstate'
-                  workingDirectory: '$(System.DefaultWorkingDirectory)/Example1-VariableTypes/'
-              - task: TerraformTaskV1@0
-                displayName: 'plan'
-                inputs:
-                  provider: 'azurerm'
-                  command: 'plan'                  
-                  environmentServiceNameAzureRM: 'tfscdevops'
-                  workingDirectory: '$(System.DefaultWorkingDirectory)/Example1-VariableTypes/'
-              - task: TerraformTaskV1@0
-                displayName: 'apply'
-                inputs:
-                  provider: 'azurerm'
-                  command: 'apply'                  
-                  environmentServiceNameAzureRM: 'tfscdevops'
-                  workingDirectory: '$(System.DefaultWorkingDirectory)/Example1-VariableTypes/'
+      - deployment: terraform_apply_develop
+        environment: testEnv
+        strategy:
+          runOnce:
+            deploy:              
+              steps:
+                    - checkout: self
+                    - task: TerraformInstaller@0
+                      displayName: 'install'
+                      inputs:
+                        terraformVersion: '0.13.3'
+                    - task: TerraformTaskV1@0
+                      displayName: 'init'
+                      inputs:
+                        provider: 'azurerm'
+                        command: 'init'
+                        backendServiceArm: 'tfscdevops'
+                        backendAzureRmResourceGroupName: 'My-Terraform-Sample'
+                        backendAzureRmStorageAccountName: 'tfbackend009'
+                        backendAzureRmContainerName: 'terraformstate'
+                        backendAzureRmKey: 'dev.tfstate'
+                        workingDirectory: '$(System.DefaultWorkingDirectory)/Example1-VariableTypes/'
+                    - task: TerraformTaskV1@0
+                      displayName: 'plan'
+                      inputs:
+                        provider: 'azurerm'
+                        command: 'plan'                  
+                        environmentServiceNameAzureRM: 'tfscdevops'
+                        workingDirectory: '$(System.DefaultWorkingDirectory)/Example1-VariableTypes/'
+                    - task: TerraformTaskV1@0
+                      displayName: 'apply'
+                      inputs:
+                        provider: 'azurerm'
+                        command: 'apply'                  
+                        environmentServiceNameAzureRM: 'tfscdevops'
+                        workingDirectory: '$(System.DefaultWorkingDirectory)/Example1-VariableTypes/'
